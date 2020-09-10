@@ -16,7 +16,7 @@ class BoardView(APIView):
     @api_view(['POST'])
     @permission_classes((IsAuthenticated, ))
     @authentication_classes((JSONWebTokenAuthentication,))
-    def post(request):
+    def post(self, request):
         board_serializer = BoardSerializer(data=request.data)
         if board_serializer.is_valid():
             board_serializer.save()
@@ -27,7 +27,7 @@ class BoardView(APIView):
     @api_view(['GET'])
     @permission_classes((IsAuthenticated, ))
     @authentication_classes((JSONWebTokenAuthentication,))
-    def get(request, **kwargs):
+    def get(self, request, **kwargs):
         if kwargs.get('id') is None:
             board_queryset = Board.objects.all()
             board_queryset_serializer = BoardSerializer(
@@ -41,11 +41,27 @@ class BoardView(APIView):
     @api_view(['PUT'])
     @permission_classes((IsAuthenticated, ))
     @authentication_classes((JSONWebTokenAuthentication,))
-    def put(request, **kwargs):
-        return Response("ok", status=status.HTTP_200_OK)
+    def put(self, request, **kwargs):
+        if kwargs.get('id') is None:
+            return Response("fail", status=status.HTTP_400_BAD_REQUEST)
+        else:
+            id = kwargs.get('id')
+            board_object = Board.objects.get(id=id)
+            update_board_serializer = BoardSerializer(board_object, data=request.data)
+            if update_board_serializer.is_valid():
+                update_board_serializer.save()
+                return Response(update_board_serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response("invalid request", status=status.HTTP_400_BAD_REQUEST)
 
     @api_view(['DELETE'])
     @permission_classes((IsAuthenticated, ))
     @authentication_classes((JSONWebTokenAuthentication,))
-    def delete(request, **kwargs):
-        return Response("ok", status=status.HTTP_200_OK)
+    def delete(self, request, **kwargs):
+        if kwargs.get('id') is None:
+            return Response("invalid delete request", status=status.HTTP_400_BAD_REQUEST)
+        else:
+            id = kwargs.get('id')
+            board_object = Board.objects.get(id=id)
+            board_object.delete()
+            return Response("delete success", status=status.HTTP_200_OK)

@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'custom_user',
     'myjwt',
     'django_practice_new',
-    'rest_framework'
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

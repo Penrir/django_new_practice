@@ -20,10 +20,10 @@ app_name = 'api'
 
 urlpatterns = [
     # User에 관한 API를 처리하는 view로 Request를 넘김
-    path('get', views.BoardView.get, name='get'),
-    path('post', views.BoardView.post, name='post'),
-    path('put', views.BoardView.put, name='put'),
-    path('delete', views.BoardView.delete, name='delete'),
-    # path('', views.BoardView.as_view())
-    # path('<int:id>', views.BoardView.as_view())
+    # path('get', views.BoardView.get, name='get'),
+    # path('post', views.BoardView.post, name='post'),
+    # path('put', views.BoardView.put, name='put'),
+    # path('delete', views.BoardView.delete, name='delete'),
+    path('board/', views.BoardView.as_view()),
+    path('board/<int:id>', views.BoardView.as_view()),
 ]
